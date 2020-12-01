@@ -1,9 +1,12 @@
-from sqlalchemy import Column, Integer, String, Text, Boolean, DateTime, JSON
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.schema import FetchedValue
-from sqlalchemy import engine
 import os
 
+import google.auth
+from google.cloud import secretmanager
+from google.oauth2 import service_account
+from sqlalchemy import (JSON, Boolean, Column, DateTime, Integer, String, Text,
+                        engine)
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.schema import FetchedValue
 
 Base = declarative_base()
 
@@ -214,14 +217,39 @@ base_dict = dict({
         'profile': None
     })
 
+def get_mysql_password():
+    if os.getenv('IS_CLOUD') == 'True':
+        creds, project = google.auth.default()
+    else:
+        creds = service_account.Credentials.from_service_account_file('/home/nicolas/gcp/key.json') 
+    client = secretmanager.SecretManagerServiceClient(credentials=creds)
+    secret_name = "gcf-mysql-password"
+    project_id = "janium0-0"
+    request = {"name": f"projects/{project_id}/secrets/{secret_name}/versions/latest"}
+    response = client.access_secret_version(request)
+    return response.payload.data.decode('UTF-8')
+
+def get_mysql_host():
+    if os.getenv('IS_CLOUD') == 'True':
+        creds, project = google.auth.default()
+        secret_name = "mysql-internal-host"
+    else:
+        creds = service_account.Credentials.from_service_account_file('/home/nicolas/gcp/key.json')
+        secret_name = "mysql-external-host"
+    client = secretmanager.SecretManagerServiceClient(credentials=creds)
+    project_id = "janium0-0"
+    request = {"name": f"projects/{project_id}/secrets/{secret_name}/versions/latest"}
+    response = client.access_secret_version(request)
+    return response.payload.data.decode('UTF-8')
+
 def get_db_url():
     if os.getenv('IS_CLOUD') == 'True':
-        host = os.getenv('DB_HOST')
+        host = get_mysql_host()
         port = os.getenv('DB_PORT')
         driver_name = os.getenv('DRIVER_NAME')
         db_name = os.getenv('DB_NAME')
         db_user = os.getenv('DB_USER')
-        db_password = os.getenv('DB_PASSWORD')
+        db_password = get_mysql_password()
         return engine.url.URL(
             drivername=driver_name,
             username=db_user,
@@ -233,11 +261,11 @@ def get_db_url():
 
     from dotenv import load_dotenv
     load_dotenv()
-    host = os.getenv('HOST')
+    host = get_mysql_host()
     driver_name = os.getenv('DRIVER_NAME')
     db_name = os.getenv('DB_NAME')
     db_user = os.getenv('DB_USER')
-    db_password = os.getenv('DB_PASSWORD')
+    db_password = get_mysql_password()
     return engine.url.URL(
         drivername=driver_name,
         username=db_user,

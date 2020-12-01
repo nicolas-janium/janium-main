@@ -5,7 +5,7 @@ from google.oauth2 import service_account
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from db_test import (Campaign, Client, Client_manager, Daily_tasks_email,
+from sal_db_test import (Campaign, Client, Client_manager, Daily_tasks_email,
                      get_db_url)
 
 

@@ -6,13 +6,22 @@ from google.cloud import pubsub_v1
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from sal_db import Campaign, Client, get_db_url, Client_manager
+from sal_db import Campaign, Client, Client_manager, get_db_url
 
+
+def get_callback(f, clientid):
+    def callback(f):
+        try:
+            messageid = f.result()
+            print("Successfully sent pubsub message to poll-webhook-topic. Messageid: {}. Clientid: {}".format(messageid, clientid))
+        except:
+            print("Pubsub message failed to send to poll-webhook-topic. Message future exception: {}".format(f.exception()))
+    return callback
 
 def main(event, context):
     pubsub_message = base64.b64decode(event['data']).decode('utf-8')
     payload_json = json.loads(pubsub_message)
-    if payload_json and 'from' in payload_json:
+    if payload_json and 'from' in payload_json: # pylint: disable=too-many-nested-blocks
         if payload_json['from'] == 'janium-main-scheduler':
             db_url = get_db_url()
             db_engine = create_engine(db_url, echo=False)
@@ -40,15 +49,6 @@ def main(event, context):
                             "clientid": client.id
                         }
                     }
-
-                    def get_callback(f, clientid):
-                        def callback(f):
-                            try:
-                                messageid = f.result()
-                                print("Successfully sent pubsub message to poll-webhook-topic. Messageid: {}. Clientid: {}".format(messageid, clientid))
-                            except:
-                                print("Pubsub message failed to send to poll-webhook-topic. Message future exception: {}".format(f.exception()))
-                        return callback
 
                     future = publisher.publish(topic_path, json.dumps(pwf_payload).encode('utf-8'))
                     future.add_done_callback(get_callback(future, client.id))

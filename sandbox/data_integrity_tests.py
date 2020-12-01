@@ -1,5 +1,5 @@
 import os
-from db_test import Client, Campaign, Contact, Activity, New_connection_wh_res, New_message_wh_res, Send_message_wh_res
+from sal_db_test import Client, Campaign, Contact, Activity, New_connection_wh_res, New_message_wh_res, Send_message_wh_res
 from sqlalchemy import create_engine, engine
 from sqlalchemy.orm import sessionmaker
 import requests

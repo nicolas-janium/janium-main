@@ -11,7 +11,7 @@ from google.cloud import secretmanager
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from db_test import Daily_tasks_email, get_db_url
+from sal_db_test import Daily_tasks_email, get_db_url
 
 
 def get_lpass_master():
