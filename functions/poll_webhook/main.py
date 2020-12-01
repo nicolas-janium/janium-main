@@ -136,7 +136,7 @@ def main(event, context):
             if len(wh_res_id_list) > 0:
                 for item_dict in wh_res_id_list:
                     handle_jdata(client, item_dict, session) #  Handle the jdata from the webhook response by parsing and inserting into the contacts and activity tables
-            print('Saved and handled all webhook responses')
+            # print('Saved and handled all webhook responses')
         else:
             print("The pubsub message was not sent from the director-function function")
     else:
