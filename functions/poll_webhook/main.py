@@ -10,16 +10,15 @@ from nameparser import HumanName
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-import sal_db
 from sal_db import (Activity, Campaign, Client, Contact, New_connection_wh_res,
-                New_message_wh_res, Send_message_wh_res, get_db_url)
+                New_message_wh_res, Send_message_wh_res, get_db_url, base_dict)
 
 
 def scrub_name(name):
     return HumanName(demoji.replace(name.replace(',', ''), ''))
 
 def create_new_contact(contact_info, campaignid, clientid, wh_id, wh_type):
-    data = {**db.base_dict, **contact_info}
+    data = {**base_dict, **contact_info}
     contactid = str(uuid.uuid4())
     name = scrub_name(data['first_name'] + ' ' + data['last_name'])
     return Contact(
