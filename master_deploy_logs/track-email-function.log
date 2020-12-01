@@ -1,0 +1,3 @@
+Deploying function (may take a while - up to 2 minutes)...
+.
+For Cloud Build Stackdriver Logs, visit: https://console.cloud.google.com/logs/viewer?project=janium0-0&advancedFilter=resource.type%3Dbuild%0Aresource.labels.build_id%3De592c294-5ab8-463c-b438-8a61ff7e2c6f%0AlogName%3Dprojects%2Fjanium0-0%2Flogs%2Fcloudbuild

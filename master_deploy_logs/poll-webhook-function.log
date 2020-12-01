@@ -1,0 +1,33 @@
+Deploying function (may take a while - up to 2 minutes)...
+..
+For Cloud Build Stackdriver Logs, visit: https://console.cloud.google.com/logs/viewer?project=janium0-0&advancedFilter=resource.type%3Dbuild%0Aresource.labels.build_id%3D402f8310-3212-4107-a2c3-9122aad028a2%0AlogName%3Dprojects%2Fjanium0-0%2Flogs%2Fcloudbuild
+availableMemoryMb: 256
+buildId: 402f8310-3212-4107-a2c3-9122aad028a2
+entryPoint: main
+environmentVariables:
+  CONNECTION_NAME: janium0-0:us-central1:janium-mysql0-0
+  DB_NAME: janiumProd
+  DB_PORT: '3306'
+  DB_USER: gcf
+  DRIVER_NAME: mysql+pymysql
+  IS_CLOUD: 'True'
+  TRACKER_URL: https://us-central1-janium0-0.cloudfunctions.net/track-email-function
+eventTrigger:
+  eventType: google.pubsub.topic.publish
+  failurePolicy: {}
+  resource: projects/janium0-0/topics/poll-webhook-topic
+  service: pubsub.googleapis.com
+ingressSettings: ALLOW_ALL
+labels:
+  deployment-tool: cli-gcloud
+name: projects/janium0-0/locations/us-central1/functions/poll-webhook-function
+runtime: python38
+serviceAccountEmail: janium0-0@appspot.gserviceaccount.com
+sourceUploadUrl: https://storage.googleapis.com/gcf-upload-us-central1-3cf48c95-c05e-4070-bb22-83e0fda85072/adf9a60a-e006-42c7-a41e-74be77ff6af1.zip?GoogleAccessId=service-419301650659@gcf-admin-robot.iam.gserviceaccount.com&Expires=1606852868&Signature=bDlY47%2FLChGiflXY30Pj%2BI%2BJ%2FDxuVnCM0ENv2%2BUJt96BY8SQgwpsqMR%2FV4jzYu4%2BTh6UQ6Xb47LHrOK9NjYU%2BuITCMuDr%2Fwaq%2BSuaRc%2FqZpsMfaAuRpFgqdyavTvhbWVLaL%2BtBXz0P6YWKQg%2FALZzuUmPGHwX57PgCATChcBtjKOtUbJ1qTUl5VDlKElOPRZ6urWoHHk5d9jntXOJZv8MfMla5U%2BBHFQMCpUfzVIkxnhIUzfJ3qWKkbsg3iXOfSuLL%2FrU4BvvyIsuF1HBzX3UsyZGYEGFkLpa8PViXG63xqjLe4NkFmd%2B7LUnlIrz3QtU3M3NFEk6Ii7QOa2ORLjVA%3D%3D
+status: ACTIVE
+timeout: 539s
+updateTime: '2020-12-01T19:32:06.207Z'
+versionId: '15'
+vpcConnector: janium-vpc-connector
+vpcConnectorEgressSettings: PRIVATE_RANGES_ONLY
+..................................done.
