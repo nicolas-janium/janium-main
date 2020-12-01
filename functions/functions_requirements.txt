@@ -1,0 +1,12 @@
+requests
+fuzzywuzzy
+python-Levenshtein
+nameparser
+demoji
+sqlalchemy
+pymysql
+lastpass-python
+beautifulsoup4
+google-cloud-secret-manager
+google-cloud-pubsub
+google-auth

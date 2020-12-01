@@ -1,0 +1,13 @@
+{
+    "trigger-type": "function",
+    "from": "director-function",
+    "data": {
+        "clientid": "63bf6eca-1d2b-11eb-9daa-42010a8002ff",
+        "client_firstname": "Nicolas",
+        "client_email": "nic@janium.io",
+        "client_ulincid": "123456",
+        "client_manager_name": "Janium",
+        "client_manager_lpass_email_id": "2575208259370624104",
+        "daily_tasks_email_id": "d423ffd9-25e7-11eb-a429-42010a3d0002"
+    }
+}

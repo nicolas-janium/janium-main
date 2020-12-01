@@ -1,0 +1,14 @@
+{
+    "trigger-type": "function",
+    "from": "director-function",
+    "data": {
+        "contact_firstname": "Alex",
+        "contact_lastname": "Salsberry",
+        "contactid": "6e417fe0-469f-41ed-8371-e0d17738bda3",
+        "contact_email": "nic@janium.io",
+        "client_fullname": "Nicolas Arnold",
+        "lpass_email": "5028567445048557853",
+        "email1_subject": "This is a subject line",
+        "email1_body": "<div dir='ltr'>Hi {} - I sent you a3 message on LinkedIn—I don't know if those things work very well...<br/><br/>I manage a network of 750 top business owners in Idaho, Wyoming, Utah, and Montana, and our exclusive annual event is Nov. 5-6th.<br/><br/>I've hand-picked you as a professional that would be a good value-add for the other business owners attending, both virtually and in-person, especially during the allocated networking time.<br/><br/>Below is the link to reserve your spot.<br/><a href='http://www.rizecon.io/rizecon-2020/' target='_blank'>www.rizecon.io/rizecon-2020/</a><br/><br/>Let me know if you won't be able to make it—I want to make sure that the reserved seat is filled with someone of quality.<br/><br/>Best,<br/>Ryan Harris<br/>CEO, Visionary &amp; Founder | RizeCon  <br/></div>"
+    }
+}

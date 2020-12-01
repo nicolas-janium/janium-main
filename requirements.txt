@@ -1,0 +1,16 @@
+nameparser
+sqlalchemy
+pymysql
+requests
+selenium
+python-dotenv
+cryptography
+demoji
+beautifulsoup4
+lastpass-python
+fuzzywuzzy
+python-Levenshtein
+google-cloud-secret-manager
+google-cloud-pubsub
+gspread
+pandas
