@@ -124,9 +124,10 @@ def main(event, context):
             client = session.query(Client).filter(Client.id == payload_json['data']['clientid']).first()
 
             wh_res_id_list = []
+            empty_webhooks = []
             for wh in webhooks:
                 wh_res = poll_webhook(wh['url'])
-                print(wh_res)
+                # print(wh_res)
                 if len(wh_res) > 0:
                     wh_res_id = save_webhook_res(client.id, wh_res, wh['type'], session) #  Save the webhook response into the mysql instance
                     wh_res_id_list.append(
@@ -136,11 +137,12 @@ def main(event, context):
                         }
                     )
                 else:
-                    print('{} webhook response was empty for client {} {}'.format(wh['type'], client.firstname, client.lastname))
+                    empty_webhooks.append(wh['type'])
+            print('Empty webhooks for client {} {}: {}'.format(client.firstname, client.lastname, empty_webhooks))
+            
             if len(wh_res_id_list) > 0:
                 for item_dict in wh_res_id_list:
                     handle_jdata(client, item_dict, session) #  Handle the jdata from the webhook response by parsing and inserting into the contacts and activity tables
-            print('Saved and handled all webhook responses')
         else:
             print("The pubsub message was not sent from the director-function function")
     else:
@@ -154,7 +156,7 @@ if __name__ == '__main__':
 
     # client = session.query(Client).filter(Client.isactive == 1).filter(Client.id == '879dcc21-3335-11eb-865a-42010a3d0004').first() # shelley
     # client = session.query(Client).filter(Client.isactive == 1).filter(Client.id == '6486f2e3-333b-11eb-865a-42010a3d0004').first() # David Lewis
-    client = session.query(Client).filter(Client.id == 'b5a0c7bd-3347-11eb-8c70-42010a3d0004').first()
+    client = session.query(Client).filter(Client.id == '53c4aa24-13ef-11eb-9daa-42010a8002ff').first()
 
 
     pwf_payload = {
@@ -170,7 +172,7 @@ if __name__ == '__main__':
         }
     }
     # print(pwf_payload)
-    # main(pwf_payload, 2)
+    main(pwf_payload, 2)
 
     # wh_dict = {
     #     'type': 'new_connection',

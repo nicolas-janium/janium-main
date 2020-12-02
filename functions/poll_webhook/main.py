@@ -121,6 +121,7 @@ def main(event, context):
             client = session.query(Client).filter(Client.id == payload_json['data']['clientid']).first()
 
             wh_res_id_list = []
+            empty_webhooks = []
             for wh in webhooks:
                 wh_res = poll_webhook(wh['url'])
                 if len(wh_res) > 0:
@@ -132,11 +133,12 @@ def main(event, context):
                         }
                     )
                 else:
-                    print('{} webhook response was empty for client {} {}'.format(wh['type'], client.firstname, client.lastname))
+                    empty_webhooks.append(wh['type'])
+            print('Empty webhooks for client {} {}: {}'.format(client.firstname, client.lastname, empty_webhooks))
+            
             if len(wh_res_id_list) > 0:
                 for item_dict in wh_res_id_list:
                     handle_jdata(client, item_dict, session) #  Handle the jdata from the webhook response by parsing and inserting into the contacts and activity tables
-            # print('Saved and handled all webhook responses')
         else:
             print("The pubsub message was not sent from the director-function function")
     else:
