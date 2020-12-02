@@ -1,3 +1,31 @@
 Deploying function (may take a while - up to 2 minutes)...
 .
 For Cloud Build Stackdriver Logs, visit: https://console.cloud.google.com/logs/viewer?project=janium0-0&advancedFilter=resource.type%3Dbuild%0Aresource.labels.build_id%3De592c294-5ab8-463c-b438-8a61ff7e2c6f%0AlogName%3Dprojects%2Fjanium0-0%2Flogs%2Fcloudbuild
+Deploying function (may take a while - up to 2 minutes)...
+.
+For Cloud Build Stackdriver Logs, visit: https://console.cloud.google.com/logs/viewer?project=janium0-0&advancedFilter=resource.type%3Dbuild%0Aresource.labels.build_id%3D458a18cd-4f29-4ed6-baa1-a37aeafed44b%0AlogName%3Dprojects%2Fjanium0-0%2Flogs%2Fcloudbuild
+availableMemoryMb: 256
+buildId: 458a18cd-4f29-4ed6-baa1-a37aeafed44b
+entryPoint: main
+environmentVariables:
+  CONNECTION_NAME: janium0-0:us-central1:janium-mysql0-0
+  DB_NAME: janiumProd
+  DB_PORT: '3306'
+  DB_USER: gcf
+  DRIVER_NAME: mysql+pymysql
+  IS_CLOUD: 'True'
+  TRACKER_URL: https://us-central1-janium0-0.cloudfunctions.net/track-email-function
+httpsTrigger:
+  url: https://us-central1-janium0-0.cloudfunctions.net/track-email-function
+ingressSettings: ALLOW_ALL
+labels:
+  deployment-tool: cli-gcloud
+name: projects/janium0-0/locations/us-central1/functions/track-email-function
+runtime: python38
+serviceAccountEmail: janium0-0@appspot.gserviceaccount.com
+sourceUploadUrl: https://storage.googleapis.com/gcf-upload-us-central1-3cf48c95-c05e-4070-bb22-83e0fda85072/93582358-4bce-462e-b033-794d0a150f94.zip?GoogleAccessId=service-419301650659@gcf-admin-robot.iam.gserviceaccount.com&Expires=1606869619&Signature=qmWgapBVf8EhuJBcnYjoE6nmi9nE3J%2FzgRkhfFCZH%2FR4GBPigscey4YeVSYOw8%2FG5Bf9dwXzCENTSiKYkI1CMcCac11%2BuW9hjaZUaGU6VrtSmhDEJ3jZDBpJ22CXDHReR3DR61IIo2kyWe0SMoglusuAQITmqph5Bd9mDlJ8Xyk3UWwpwKIze9fimC8gDRC%2FAnlltj6nSuLh9zC8tAWJZi3aMQwuWhMuE9XjcI3qR4lJHfj%2FgeNufmVOvkLLAwxem1eFTHOx87Pb1tsPHDqAV321qn2vcLRBC6xxIYI0aOitQXLdutR2G2lnoQJvgFjXiAzMy4YnYafs5tKlQaMFGg%3D%3D
+status: ACTIVE
+timeout: 539s
+updateTime: '2020-12-02T00:11:37.873Z'
+versionId: '4'
+..............................................done.

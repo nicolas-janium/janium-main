@@ -1,3 +1,36 @@
 Deploying function (may take a while - up to 2 minutes)...
 ..
 For Cloud Build Stackdriver Logs, visit: https://console.cloud.google.com/logs/viewer?project=janium0-0&advancedFilter=resource.type%3Dbuild%0Aresource.labels.build_id%3Daaaac33a-99c3-4b0d-8508-29f01f5791a7%0AlogName%3Dprojects%2Fjanium0-0%2Flogs%2Fcloudbuild
+Deploying function (may take a while - up to 2 minutes)...
+..
+For Cloud Build Stackdriver Logs, visit: https://console.cloud.google.com/logs/viewer?project=janium0-0&advancedFilter=resource.type%3Dbuild%0Aresource.labels.build_id%3D28bdc67a-b7c7-41f2-8483-87a24433ea26%0AlogName%3Dprojects%2Fjanium0-0%2Flogs%2Fcloudbuild
+availableMemoryMb: 256
+buildId: 28bdc67a-b7c7-41f2-8483-87a24433ea26
+entryPoint: main
+environmentVariables:
+  CONNECTION_NAME: janium0-0:us-central1:janium-mysql0-0
+  DB_NAME: janiumProd
+  DB_PORT: '3306'
+  DB_USER: gcf
+  DRIVER_NAME: mysql+pymysql
+  IS_CLOUD: 'True'
+  TRACKER_URL: https://us-central1-janium0-0.cloudfunctions.net/track-email-function
+eventTrigger:
+  eventType: google.pubsub.topic.publish
+  failurePolicy: {}
+  resource: projects/janium0-0/topics/janium-main-topic
+  service: pubsub.googleapis.com
+ingressSettings: ALLOW_ALL
+labels:
+  deployment-tool: cli-gcloud
+name: projects/janium0-0/locations/us-central1/functions/director-function
+runtime: python38
+serviceAccountEmail: janium0-0@appspot.gserviceaccount.com
+sourceUploadUrl: https://storage.googleapis.com/gcf-upload-us-central1-3cf48c95-c05e-4070-bb22-83e0fda85072/ca2eb9d7-d0c3-47a3-bed4-b17fe883d52d.zip?GoogleAccessId=service-419301650659@gcf-admin-robot.iam.gserviceaccount.com&Expires=1606869602&Signature=yzbzUZAX10KsuxaMXfd5AI3gN8QllADVukCiBCt%2FyCh3V40rkr5d6NopGHff5%2FXDUjeY%2FZOh9rvMhnhfi1zeq1HdO6d%2FkVh%2B40gfSA4%2FOnl7L539iN6TsTgjZ0Amz5mtzPRRms5%2BYoavnXZJ2erMMnnFOPaLUu3ar%2BgsO%2FPpKAVK0DOMupazb92EpRGp%2Fobm%2F%2B%2F7GR3S3sqJfykcQtsxxVlOwRDfu5vagtbaALXNOvJbFZn7E6XExfE34i7u6p0dfZQICRe2jKOZeca1%2BB4e1oPNZvbZIeI4dL41ANIOsgK5BCDMY9D%2BcCK3iVZP4GigF7clGIXrzo2DWwcS49Cn3w%3D%3D
+status: ACTIVE
+timeout: 539s
+updateTime: '2020-12-02T00:11:21.528Z'
+versionId: '30'
+vpcConnector: janium-vpc-connector
+vpcConnectorEgressSettings: PRIVATE_RANGES_ONLY
+..............................................done.
