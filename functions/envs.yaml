@@ -1,7 +1,7 @@
 DRIVER_NAME: 'mysql+pymysql'
 DB_PORT: '3306'
 DB_USER: 'gcf'
-DB_NAME: 'janium-master'
+DB_NAME: 'janium_master'
 CONNECTION_NAME: 'janium0-0:us-central1:janium-mysql0-0'
 IS_CLOUD: 'True'
 TRACKER_URL: 'https://us-central1-janium0-0.cloudfunctions.net/track-email-function'
