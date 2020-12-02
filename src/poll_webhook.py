@@ -26,6 +26,7 @@ def create_new_contact(contact_info, campaignid, clientid, wh_id, wh_type):
         str(campaignid),
         str(clientid),
         data['id'],
+        data['campaign_id'],
         name.first,
         name.last,
         data['title'],
@@ -152,7 +153,8 @@ if __name__ == '__main__':
     session = sessionmaker(bind=db_engine)()
 
     # client = session.query(Client).filter(Client.isactive == 1).filter(Client.id == '879dcc21-3335-11eb-865a-42010a3d0004').first() # shelley
-    client = session.query(Client).filter(Client.isactive == 1).filter(Client.id == '6486f2e3-333b-11eb-865a-42010a3d0004').first() # David Lewis
+    # client = session.query(Client).filter(Client.isactive == 1).filter(Client.id == '6486f2e3-333b-11eb-865a-42010a3d0004').first() # David Lewis
+    client = session.query(Client).filter(Client.id == '53c4aa24-13ef-11eb-9daa-42010a8002ff').first() # Ethan Arnold
 
 
     pwf_payload = {
@@ -169,3 +171,10 @@ if __name__ == '__main__':
     }
     # print(pwf_payload)
     main(pwf_payload, 2)
+
+    # wh_dict = {
+    #     'type': 'new_connection',
+    #     'id': 'aaf74fc3-e3c8-4805-b404-8c0d1c9bff52'
+    # }
+
+    # handle_jdata(client, wh_dict, session)

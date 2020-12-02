@@ -5,7 +5,6 @@ from datetime import datetime, timedelta
 
 import demoji
 import requests
-from google.cloud import pubsub_v1
 from nameparser import HumanName
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -26,6 +25,7 @@ def create_new_contact(contact_info, campaignid, clientid, wh_id, wh_type):
         str(campaignid),
         str(clientid),
         data['id'],
+        data['campaign_id'],
         name.first,
         name.last,
         data['title'],

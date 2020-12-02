@@ -1,0 +1,12 @@
+{
+    "trigger-type": "function",
+    "from": "director-function",
+    "data": {
+        "webhooks": [
+            {"url": "https://ulinc.co/zap/4fd7a88249a03470fc16de17fd9a7267", "type": "new_connection"},
+            {"url": "https://ulinc.co/zap/2ccfb4ddfa541fb10891e68627d0f6e6", "type": "new_message"},
+            {"url": "https://ulinc.co/zap/1ef7c14046da983fa4ededc38014250b", "type": "send_message"}
+        ],
+        "clientid": "53c4aa24-13ef-11eb-9daa-42010a8002ff"
+    }
+}

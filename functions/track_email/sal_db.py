@@ -61,13 +61,14 @@ class Campaign(Base):
 class Contact(Base):
     __tablename__ = 'contact'
 
-    def __init__(self, contactid, campaign_id, clientid, ulincid, firstname, lastname, title,
+    def __init__(self, contactid, campaign_id, clientid, ulincid, ulinc_campaignid, firstname, lastname, title,
                  company, location, email, phone, website, li_profile_url, from_wh_id, from_wh_type
                 ):
         self.id = contactid
         self.campaignid = campaign_id
         self.clientid = clientid
         self.ulincid = ulincid
+        self.ulinc_campaignid = ulinc_campaignid
         self.firstname = firstname
         self.lastname = lastname
         self.title = title
@@ -84,6 +85,7 @@ class Contact(Base):
     campaignid = Column(String(36), nullable=False)
     clientid = Column(String(36), nullable=False)
     ulincid = Column(String(20), nullable=False)
+    ulinc_campaignid = Column(String(20), nullable=False)
     dateadded = Column(DateTime, server_default=FetchedValue())
     firstname = Column(String(250), nullable=False)
     lastname = Column(String(250), nullable=False)
