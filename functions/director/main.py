@@ -13,9 +13,9 @@ def get_callback(f, clientid):
     def callback(f):
         try:
             messageid = f.result()
-            print("Successfully sent pubsub message to poll-webhook-topic. Messageid: {}. Clientid: {}".format(messageid, clientid))
+            # print("Successfully sent pubsub message to poll-webhook-topic. Messageid: {}. Clientid: {}".format(messageid, clientid))
         except:
-            print("Pubsub message failed to send to poll-webhook-topic. Message future exception: {}".format(f.exception()))
+            print("Message future exception: {}".format(f.exception()))
     return callback
 
 def main(event, context):
@@ -29,6 +29,9 @@ def main(event, context):
 
             active_clients = session.query(Client).filter(Client.isactive == 1).all()
 
+            poll_list = []
+            daily_tasks_list = []
+            send_email_list = []
             for client in active_clients:
                 ### Poll Webhooks and save ###
                 ###                        ###
@@ -52,6 +55,7 @@ def main(event, context):
 
                     future = publisher.publish(topic_path, json.dumps(pwf_payload).encode('utf-8'))
                     future.add_done_callback(get_callback(future, client.id))
+                    poll_list.append(client.id)
                 except Exception as err:
                     print("There was an error in publishing a message to the poll-webhook-topic. Error {}".format(err))
 
@@ -86,8 +90,10 @@ def main(event, context):
 
                         future = publisher.publish(topic_path, json.dumps(sdf_payload).encode('utf-8'))
                         future.add_done_callback(get_callback(future, client.id))
+                        daily_tasks_list.append(client.id)
                     else:
-                        print("skipping daily tasks email. Now variable: {}. Deadline variable: {}. Time remaining variable: {}".format(now, deadline, time_remaining))
+                        # print("skipping daily tasks email. Now variable: {}. Deadline variable: {}. Time remaining variable: {}".format(now, deadline, time_remaining))
+                        pass
                 except Exception as err:
                     print("There was an error in publishing a message to the send-daily-tasks-topic. Error {}".format(err))
 
@@ -132,9 +138,12 @@ def main(event, context):
 
                         future = publisher.publish(topic_path, json.dumps(sef_payload).encode('utf-8'))
                         future.add_done_callback(get_callback(future, client.id))
-
+                        send_email_list.append(client.id)
                     except Exception as err:
                         print("There was an error in publishing a message to the send-email-topic. Error: {}".format(err))
+            print("Sent poll-webhook pubsub messages for clients {}".format(poll_list))
+            print("Sent send-daily-tasks pubsub messages for clients {}".format(daily_tasks_list))
+            print("Sent send-email pubsub messages for clients {}".format(send_email_list))
         else:
             print("The pubsub message was not sent from the janium-main-scheduler job")
     else:
