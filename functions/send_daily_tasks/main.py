@@ -11,7 +11,7 @@ from google.cloud import secretmanager
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from sal_db import Daily_tasks_email, get_db_url
+from sal_db import Client_daily_tasks_email, get_db_url
 
 
 def get_lpass_master():
@@ -122,8 +122,8 @@ def main(event, context):
                     }
                 ]
             try:
-                email_body = session.query(Daily_tasks_email).filter(Daily_tasks_email.id == details['daily_tasks_email_id']).first().body
-                email_subject = session.query(Daily_tasks_email).filter(Daily_tasks_email.id == details['daily_tasks_email_id']).first().subject
+                email_body = session.query(Client_daily_tasks_email).filter(Client_daily_tasks_email.id == details['daily_tasks_email_id']).first().body
+                email_subject = session.query(Client_daily_tasks_email).filter(Client_daily_tasks_email.id == details['daily_tasks_email_id']).first().subject
             except Exception as err:
                 print("There was an error while querying the DB for email_body and subject. Error: {}".format(err))
 

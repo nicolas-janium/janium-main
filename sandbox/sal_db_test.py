@@ -175,8 +175,8 @@ class Client_manager(Base):
     lpass_email = Column(String(20), nullable=False)
     email = Column(String(100))
 
-class Daily_tasks_email(Base):
-    __tablename__ = 'daily_tasks_email'
+class Client_daily_tasks_email(Base):
+    __tablename__ = 'client_daily_tasks_email'
 
     id = Column(String(36), nullable=False, primary_key=True)
     name = Column(String(250), nullable=False)
