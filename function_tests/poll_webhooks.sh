@@ -3,6 +3,6 @@ echo "Where should this message send from?"
 read from
 echo "$from"
 payload=$(jq --arg from "$from" '.from = $from' "$payload_path")
-echo "$payload"
+# echo "$payload"
 
 gcloud pubsub topics publish poll-webhook-topic --message "$payload"
