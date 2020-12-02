@@ -232,10 +232,10 @@ def get_mysql_password():
 def get_mysql_host():
     if os.getenv('IS_CLOUD') == 'True':
         creds, project = google.auth.default()
-        secret_name = "mysql-internal-host"
+        secret_name = "janium-mysql-master-private-ip"
     else:
         creds = service_account.Credentials.from_service_account_file('/home/nicolas/gcp/key.json')
-        secret_name = "mysql-external-host"
+        secret_name = "janium-mysql-master-public-ip"
     client = secretmanager.SecretManagerServiceClient(credentials=creds)
     project_id = "janium0-0"
     request = {"name": f"projects/{project_id}/secrets/{secret_name}/versions/latest"}
