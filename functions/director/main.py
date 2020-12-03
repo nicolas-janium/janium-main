@@ -64,9 +64,7 @@ def main(event, context):
                 ###                        ###
                 try:
                     now = datetime.now()
-                    deadline = datetime(now.year, now.month, now.day, 16, 00)
-                    time_remaining = deadline - now
-                    if time_remaining.days == 0 and now.weekday() not in [5,6]:
+                    if now.weekday() not in [5,6]:
                         clientmanager = session.query(Client_manager).filter(Client_manager.id == client.clientmanager).first()
                         project_id = "janium0-0"
                         topic_id = "send-daily-tasks-topic"

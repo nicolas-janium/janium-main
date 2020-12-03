@@ -2,9 +2,10 @@
     "trigger-type": "function",
     "from": "director-function",
     "data": {
-        "clientid": "63bf6eca-1d2b-11eb-9daa-42010a8002ff",
+        "clientid": "6486f2e3-333b-11eb-865a-42010a3d0004",
         "client_firstname": "Nicolas",
         "client_email": "nic@janium.io",
+        "campaign_management_email": "nic@janium.io",
         "client_ulincid": "123456",
         "client_manager_name": "Janium",
         "client_manager_lpass_email_id": "2575208259370624104",
