@@ -3,6 +3,8 @@ import json
 import smtplib
 from email.header import Header
 from email.message import EmailMessage
+from datetime import datetime
+import pytz
 
 import google.auth
 import lastpass
@@ -11,7 +13,7 @@ from google.cloud import secretmanager
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from sal_db import Client_daily_tasks_email, get_db_url
+from sal_db import Client_daily_tasks_email, get_db_url, Client_daily_tasks_email_history
 
 
 def get_lpass_master():
@@ -76,7 +78,7 @@ def tailor_email(email_body, client_ulinc_id, client_firstname):
 
     return str(soup)
 
-def send_email(email_body, subject, details):
+def send_email(email_body, subject, details, session):
     username, password = get_credentials(details['client_manager_lpass_email_id'])
     recipients = [details['client_email'], details['campaign_management_email']]
     main_email = EmailMessage()
@@ -94,6 +96,10 @@ def send_email(email_body, subject, details):
         server.login(username, password)
         server.send_message(main_email)
         print('Sent daily tasks emails to {} for client {}'.format(recipients, details['client_firstname']))
+    
+        new_daily_tasks_email = Client_daily_tasks_email_history(details['clientid'])
+        session.add(new_daily_tasks_email)
+        session.commit()
     except Exception as err:
         print(err)
     finally:
@@ -110,6 +116,14 @@ def main(event, context):
     if payload_json and 'from' in payload_json and 'data' in payload_json:
         if payload_json['from'] == 'director-function':
             details = payload_json['data']
+            daily_tasks_history = session.query(Client_daily_tasks_email_history).filter(Client_daily_tasks_email_history.clientid == details['clientid']).order_by(Client_daily_tasks_email_history.dateadded.desc()).first()
+            if daily_tasks_history:
+                utc_now = pytz.utc.localize(datetime.utcnow())
+                mnt_now = utc_now.astimezone(pytz.timezone("America/Denver"))
+
+                if mnt_now.date() == daily_tasks_history.dateadded.date():
+                    print("Daily tasks email already sent today for client {}".format(details['client_firstname']))
+                    return
             with db_engine.connect() as conn:
                 data_sets = [
                     {
@@ -131,7 +145,7 @@ def main(event, context):
                 email_body = populate_table(email_body, data_set)
 
             email_body = tailor_email(email_body, details['client_ulincid'], details['client_firstname'])
-            send_email(email_body, email_subject, details)
+            send_email(email_body, email_subject, details, session)
         else:
             print("The pubsub message was not sent from the director-function Function")
     else:

@@ -205,6 +205,16 @@ class Ulinc_cookie(Base):
     pwd = Column(Integer, nullable=False)
     expires = Column(DateTime, nullable=False)
 
+class Client_daily_tasks_email_history(Base):
+    __tablename__ = 'client_daily_tasks_email_history'
+
+    def __init__(self, clientid):
+        self.clientid = clientid
+
+    id = Column(Integer, primary_key=True)
+    clientid = Column(String(36), nullable=False)
+    dateadded = Column(DateTime, server_default=FetchedValue())
+
 base_dict = dict({
         'campaign_id': 0,
         'id': None,

@@ -3,24 +3,28 @@ import json
 import smtplib
 from email.header import Header
 from email.message import EmailMessage
+from datetime import datetime
+import pytz
 
 import google.auth
+from google.oauth2 import service_account
 import lastpass
 from bs4 import BeautifulSoup as Soup
 from google.cloud import secretmanager
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from sal_db import Daily_tasks_email, get_db_url, Client, Client_manager
+from sal_db import Client_daily_tasks_email, get_db_url, Client, Client_manager, Client_daily_tasks_email_history
 
 
 def get_lpass_master():
-    creds, project = google.auth.default()
-    client = secretmanager.SecretManagerServiceClient(credentials=creds)
+    # creds, project = google.auth.default()
+    creds = service_account.Credentials.from_service_account_file('/home/nicolas/gcp/key.json')
+    secret_client = secretmanager.SecretManagerServiceClient(credentials=creds)
     secret_name = "janium-lastpass-masterpass"
     project_id = "janium0-0"
     request = {"name": f"projects/{project_id}/secrets/{secret_name}/versions/latest"}
-    response = client.access_secret_version(request)
+    response = secret_client.access_secret_version(request)
     return response.payload.data.decode('UTF-8')
 
 def get_credentials(lpass_id):
@@ -76,10 +80,10 @@ def tailor_email(email_body, client_ulinc_id, client_firstname):
 
     return str(soup)
 
-def send_email(email_body, subject, details):
+def send_email(email_body, subject, details, session):
     username, password = get_credentials(details['client_manager_lpass_email_id'])
     # recipients = [details['client_email'], details['campaign_management_email']]
-    recipients = ['nic@janium.io', 'jason@janium.io']
+    # recipients = ['nic@janium.io', 'jason@janium.io']
     recipients = 'nic@janium.io'
     main_email = EmailMessage()
 
@@ -95,6 +99,10 @@ def send_email(email_body, subject, details):
         server.starttls()
         server.login(username, password)
         server.send_message(main_email)
+
+        new_daily_tasks_email = Client_daily_tasks_email_history(details['clientid'])
+        session.add(new_daily_tasks_email)
+        session.commit()
     except Exception as err:
         print(err)
     finally:
@@ -110,6 +118,14 @@ def main(event, context):
     if payload_json and 'from' in payload_json and 'data' in payload_json:
         if payload_json['from'] == 'director-function':
             details = payload_json['data']
+            daily_tasks_history = session.query(Client_daily_tasks_email_history).filter(Client_daily_tasks_email_history.clientid == details['clientid']).order_by(Client_daily_tasks_email_history.dateadded.desc()).first()
+            if daily_tasks_history:
+                utc_now = pytz.utc.localize(datetime.utcnow())
+                mnt_now = utc_now.astimezone(pytz.timezone("America/Denver"))
+
+                if mnt_now.date() == daily_tasks_history.dateadded.date():
+                    print("Daily tasks email already sent today")
+                    return
             with db_engine.connect() as conn:
                 data_sets = [
                     {
@@ -122,16 +138,17 @@ def main(event, context):
                     }
                 ]
             try:
-                email_body = session.query(Daily_tasks_email).filter(Daily_tasks_email.id == details['daily_tasks_email_id']).first().body
-                email_subject = session.query(Daily_tasks_email).filter(Daily_tasks_email.id == details['daily_tasks_email_id']).first().subject
+                email_body = session.query(Client_daily_tasks_email).filter(Client_daily_tasks_email.id == details['daily_tasks_email_id']).first().body
+                email_subject = session.query(Client_daily_tasks_email).filter(Client_daily_tasks_email.id == details['daily_tasks_email_id']).first().subject
             except Exception as err:
                 print("There was an error while querying the DB for email_body and subject. Error: {}".format(err))
 
             for data_set in data_sets:
+                print(data_set)
                 email_body = populate_table(email_body, data_set)
 
-            email_body = tailor_email(email_body, details['client_ulincid'], details['client_firstname'])
-            send_email(email_body, email_subject, details)
+            # email_body = tailor_email(email_body, details['client_ulincid'], details['client_firstname'])
+            # send_email(email_body, email_subject, details, session)
         else:
             print("The pubsub message was not sent from the director-function Function")
     else:
@@ -144,8 +161,9 @@ if __name__ == '__main__':
     session = sessionmaker(bind=db_engine)()
 
     # client = session.query(Client).filter(Client.isactive == 1).filter(Client.id == '879dcc21-3335-11eb-865a-42010a3d0004').first() # shelley
-    client = session.query(Client).filter(Client.isactive == 1).filter(Client.id == '6486f2e3-333b-11eb-865a-42010a3d0004').first() # David Lewis
+    # client = session.query(Client).filter(Client.isactive == 1).filter(Client.id == '6486f2e3-333b-11eb-865a-42010a3d0004').first() # David Lewis
     client = session.query(Client).filter(Client.isactive == 1).filter(Client.id == 'f250e0e4-334a-11eb-8c70-42010a3d0004').first() # Lesa Skipper
+    # client = session.query(Client).filter(Client.isactive == 1).filter(Client.id == '8a788da0-3349-11eb-8c70-42010a3d0004').first() # Jim Bras
     clientmanager = session.query(Client_manager).filter(Client_manager.id == client.clientmanager).first()
 
 
@@ -155,7 +173,7 @@ if __name__ == '__main__':
         "data": {
             "clientid": client.id,
             "client_firstname": client.firstname,
-            "client_email": client.email,
+            "client_email": "nic@janium.io",
             "client_ulincid": client.ulincid,
             "client_manager_name": clientmanager.name,
             "campaign_management_email": client.campaign_management_email,
